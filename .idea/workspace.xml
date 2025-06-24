@@ -4,15 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="79046667-863c-4695-8e2b-3fc05edb2050" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/AssisLLM.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+    <list default="true" id="79046667-863c-4695-8e2b-3fc05edb2050" name="更改" comment="ver0.1">
+      <change afterPath="$PROJECT_DIR$/data/ustcGuide.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat_assistant.py" beforeDir="false" afterPath="$PROJECT_DIR$/chat_assistant.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/data.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/campus_information/chroma.sqlite3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/campus_information/dc2b41b3-4b68-4bf4-a6dc-180c8f8f412a/data_level0.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/campus_information/dc2b41b3-4b68-4bf4-a6dc-180c8f8f412a/header.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/campus_information/dc2b41b3-4b68-4bf4-a6dc-180c8f8f412a/length.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/campus_information/dc2b41b3-4b68-4bf4-a6dc-180c8f8f412a/link_lists.bin" beforeDir="false" afterPath="$PROJECT_DIR$/intent_classifier.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/classes_information/c65dc3dd-251d-413d-b9fe-728f0435c1f3/data_level0.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/classes_information/c65dc3dd-251d-413d-b9fe-728f0435c1f3/header.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/classes_information/c65dc3dd-251d-413d-b9fe-728f0435c1f3/length.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/classes_information/c65dc3dd-251d-413d-b9fe-728f0435c1f3/link_lists.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/classes_information/chroma.sqlite3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generate_vectorscore.py" beforeDir="false" afterPath="$PROJECT_DIR$/generate_vectorscore.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,6 +30,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "Likvo-g"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Likvo-g/Assistant-Bot.git",
+    "accountId": "8a97f00e-bc48-4342-a607-b975efe12b54"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -35,12 +55,22 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Python.chat_assistant.executor": "Run",
+    "Python.embed_documents.executor": "Run",
+    "Python.generate_vectorscore.executor": "Run",
+    "Python.intent_classifier.executor": "Run",
     "Python.main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
-    "settings.editor.selected.configurable": "editor.preferences.fonts.default"
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\Huobin\1py\sb\AssisLLM\data" />
+      <recent name="F:\Huobin\1py\sb\AssisLLM\none" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -57,6 +87,30 @@
       <option name="presentableId" value="Default" />
       <updated>1750655054284</updated>
     </task>
+    <task id="LOCAL-00001" summary="ver0.1">
+      <option name="closed" value="true" />
+      <created>1750759490979</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1750759490979</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="ver0.1" />
+    <option name="LAST_COMMIT_MESSAGE" value="ver0.1" />
   </component>
 </project>

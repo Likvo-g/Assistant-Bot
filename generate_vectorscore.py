@@ -1,5 +1,7 @@
+import pandas as pd
 from langchain_community.vectorstores import Chroma
 from langchain.text_splitter import CharacterTextSplitter
+from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from openai import OpenAI
 from langchain_community.document_loaders import TextLoader, UnstructuredExcelLoader
@@ -50,58 +52,80 @@ class DoubaoEmbeddings():
 
 # 生成数据库并保存到db/campus_information
 def generate_vectorstore_data_txt():
-    print("开始加载文档...")
-    # 加载文本
-    loader = TextLoader("./data/data.txt", encoding="utf-8")
+    loader = TextLoader("./data/ustcGuide.txt", encoding="utf-8")
     documents = loader.load()
-
-    print("开始切割文档...")
-    # 切割文本
     text_splitter = CharacterTextSplitter(chunk_size=300, chunk_overlap=50)
     chunks = text_splitter.split_documents(documents)
-    print(f"文档切割完成，共 {len(chunks)} 个片段")
-
-    print("开始生成向量数据库...")
-    # 生成豆包Embeddings
     embeddings = DoubaoEmbeddings()
-
-    # 指定本地存储路径
     persist_directory = "./db/campus_information"
-
-    # 存储向量后的数据到本地
     vectorstore = Chroma.from_documents(
         documents=chunks,
         embedding=embeddings,
         persist_directory=persist_directory
     )
-
     print(f"向量数据库已保存到: {persist_directory}")
     return vectorstore
 
 # 生成数据库并保存到./db/25spring_classes
 def generate_vectorscore_xlsx():
-    loader = UnstructuredExcelLoader("./data/2025spring.xlsx")
-    documents = loader.load()
+    try:
+        # 使用pandas读取Excel文件
+        df = pd.read_excel("./data/2025spring.xlsx")
+        # 将每一行转换为Document对象
+        documents = []
+        for index, row in df.iterrows():
+            course_info_parts = []
 
-    # 文本分割
-    text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=500,
-        chunk_overlap = 50
-    )
-    chunks = text_splitter.split_documents(documents)
+            for column in df.columns:
+                value = row[column]
+                # 跳过空值
+                if pd.notna(value) and str(value).strip():
+                    course_info_parts.append(f"{column}: {value}")
 
-    # 创建向量化模型
-    embeddings = DoubaoEmbeddings()
-    # 创建向量数据库
-    vectorstore = Chroma.from_documents(
-        documents=chunks,
-        embedding=embeddings,
-        persist_directory="./db/classes_information"
-    )
+            course_text = "\n".join(course_info_parts)
 
-    return vectorstore
+            doc = Document(
+                page_content=course_text,
+                metadata={
+                    "source": "2025spring.xlsx",
+                    "row_index": index,
+                    "course_id": str(row.get("课堂号", "")),
+                    "course_name": str(row.get("课程名", "")),
+                    "instructor": str(row.get("授课教师", "")),
+                }
+            )
+            documents.append(doc)
+
+        print(f"成功创建 {len(documents)} 个课程文档")
+
+        text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=1000,  # 增大chunk_size以保持课程信息完整性
+            chunk_overlap=100,
+            separators=["\n\n", "\n", "，", "。", " ", ""]
+        )
+        chunks = documents
+        # 可选择分割文档处理
+        # chunks = text_splitter.split_documents(documents)
+        print(f"amount: {len(chunks)}")
+        # 创建向量化模型
+        embeddings = DoubaoEmbeddings()
+        # 创建向量数据库
+        persist_directory = "./db/course"
+        vectorstore = Chroma.from_documents(
+            documents=chunks,
+            embedding=embeddings,
+            persist_directory=persist_directory
+        )
+
+        print(f"向量数据库已保存到: {persist_directory}")
+        return vectorstore
+
+    except FileNotFoundError:
+        return None
+    except Exception as e:
+        return None
 
 
 if __name__ == "__main__":
-    generate_vectorstore_data_txt()
+    #generate_vectorstore_data_txt()
     generate_vectorscore_xlsx()
