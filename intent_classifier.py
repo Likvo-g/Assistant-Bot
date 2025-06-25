@@ -17,15 +17,15 @@ class IntentClassifier:
         self.intent_config = {
             'campus_navigation': {
                 'vectorstore_path': os.environ.get('NAVIGATION_PATH', './db/navigation'),
-                'description': '校园导航'
+                'description': 'Navigation'
             },
             'campus_information': {
                 'vectorstore_path': os.environ.get('CAMPUS_PATH', './db/campus'),
-                'description': '校园信息'
+                'description': 'Information'
             },
             'course_selection': {
                 'vectorstore_path': os.environ.get('COURSE_PATH', './db/course'),
-                'description': '选课相关'
+                'description': 'Course'
             }
         }
 
@@ -37,7 +37,8 @@ class IntentClassifier:
                 messages=[
                     {
                         "role": "system",
-                        "content": "你是一个意图判断者,需要将用户的话分为三种类型,并输出对应结果:'campus_navigation'(校园导航)、'campus_information'(校园信息)、'course_selection'(选课相关)。仅需输出这三个选项名之一,不需要其他输出"
+                        "content": "你是一个意图判断者,需要将用户的话分为三种类型,并输出对应结果:'campus_navigation'(校园导航)、'campus_information'(校园信息)、'course_selection'(课程查询)。注意询问具体课程信息才属于课程查询,询问退课\
+                        选课\叠课等情况下属于campus_information, **仅需输出这三个选项名之一,不需要其他输出**"
                     },
                     {"role": "user", "content": question}
                 ]

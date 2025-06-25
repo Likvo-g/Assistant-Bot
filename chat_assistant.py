@@ -1,57 +1,25 @@
 from langchain_community.vectorstores import Chroma
-from openai import OpenAI
 import os
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Tuple
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.schema.runnable import RunnablePassthrough
 from langchain.schema.output_parser import StrOutputParser
 from langchain_openai import ChatOpenAI
-from dotenv import load_dotenv
+from embeddings import DoubaoEmbeddings
 from intent_classifier import IntentClassifier
-
-# 加载环境变量
-load_dotenv()
-
-
-# 构建豆包Embeddings（用于查询时的向量化）
-class DoubaoEmbeddings():
-    client: OpenAI = None
-    api_key: str = os.environ['EMBEDDING_API_KEY']
-    model: str = os.environ['EMBEDDING_MODEL']
-
-    def __init__(self, **data: any):
-        super().__init__(**data)
-        if self.api_key == "":
-            self.api_key = os.environ['EMBEDDING_API_KEY']
-
-        self.client = OpenAI(
-            api_key=self.api_key,
-            base_url=os.environ['EMBEDDING_BASE_URL']
-        )
-
-    def embed_query(self, text: str) -> List[float]:
-        embeddings = self.client.embeddings.create(
-            model=self.model,
-            input=text,
-            encoding_format="float"
-        )
-        return embeddings.data[0].embedding
-
-    def embed_documents(self, texts: List[str]) -> List[List[float]]:
-        return [self.embed_query(text) for text in texts]
-
-    class Config:
-        arbitrary_types_allowed = True
-
+from navigation_handler import MapNavigationHandler
 
 class MultiDatabaseChatAssistant:
-    def __init__(self):
+    def __init__(self, locations_json_path):
         self.intent_classifier = IntentClassifier()
         self.embeddings = DoubaoEmbeddings()
         self.vectorstores = {}  # 缓存已加载的向量数据库
         self.retrievers = {}  # 缓存已创建的检索器
         self.rag_chains = {}  # 缓存已创建的RAG链
         self.llm = None
+
+        self.navigation_handler = MapNavigationHandler(locations_json_path)
+
         self._setup_llm()
 
     def _setup_llm(self):
@@ -109,40 +77,18 @@ class MultiDatabaseChatAssistant:
 
         # 根据意图定制不同的提示模板
         templates = {
-            'campus_navigation': """
-            你是USTC校园导航助手。基于提供的校园地图和位置信息，为用户提供准确的导航指引。
-
-            <context>
-            {context}
-            </context>
-
-            问题: {input}
-
-            请提供详细的路线指引，包括具体的地标、方向和距离信息。
+            'campus_information': """以下问题基于提供的 context，分析问题并给出合理的建议回答：
+<context>
+{context}
+</context>
+Question: {input}
             """,
 
-            'campus_information': """
-            你是USTC校园信息助手。基于提供的校园相关信息，回答用户关于学校设施、服务、规定等问题。
-
-            <context>
-            {context}
-            </context>
-
-            问题: {input}
-
-            请提供准确、详细的校园信息，包括时间、地点、联系方式等具体细节。
-            """,
-
-            'course_selection': """
-            你是USTC选课助手。基于提供的课程信息和选课规则，帮助用户解决选课相关问题。
-
-            <context>
-            {context}
-            </context>
-
-            问题: {input}
-
-            请提供具体的选课指导，包括操作步骤、注意事项和相关政策。
+            'course_selection': """以下问题基于提供的 context，分析问题并给出合理的建议回答：
+<context>
+{context}
+</context>
+Question: {input}
             """
         }
 
@@ -160,7 +106,7 @@ class MultiDatabaseChatAssistant:
         self.rag_chains[intent] = rag_chain
         return rag_chain
 
-    def query(self, question: str) -> Dict[str, str]:
+    def query(self, question: str) -> Dict:
         """查询问题并返回答案"""
         try:
             # 1. 意图分类
@@ -169,7 +115,38 @@ class MultiDatabaseChatAssistant:
             intent_desc = self.intent_classifier.get_intent_description(intent)
             print(f"问题类型: {intent_desc}")
 
-            # 2. 获取对应的RAG链
+            # 2. 如果是导航意图，使用地图导航处理器
+            if intent == 'campus_navigation':
+                print("进入导航模式...")
+                navigation_result = self.navigation_handler.process_navigation_request(question)
+
+                if navigation_result["status"] == "success":
+                    data = navigation_result["data"]
+                    start_info = data["start"]
+                    end_info = data["end"]
+
+                    if start_info:
+                        answer = f"导航路线规划：\n从 {start_info['name']} (坐标: {start_info['coords']}) \n到 {end_info['name']} (坐标: {end_info['coords']})\n\n请在地图上查看详细路线。"
+                    else:
+                        answer = f"目的地：{end_info['name']} (坐标: {end_info['coords']})\n\n请在地图上查看从您当前位置到目的地的路线。"
+
+                    return {
+                        "intent": intent,
+                        "intent_description": intent_desc,
+                        "answer": answer,
+                        "status": "success",
+                        "navigation_data": navigation_result["data"]  # 额外返回导航数据供前端使用
+                    }
+                else:
+                    return {
+                        "intent": intent,
+                        "intent_description": intent_desc,
+                        "answer": navigation_result["message"],
+                        "status": "error",
+                        "navigation_data": None
+                    }
+
+            # 3. 其他意图使用原有的RAG处理
             rag_chain = self._get_rag_chain(intent)
             if rag_chain is None:
                 return {
@@ -179,7 +156,7 @@ class MultiDatabaseChatAssistant:
                     "status": "error"
                 }
 
-            # 3. 生成答案
+            # 4. 生成答案
             print("正在生成答案...")
             answer = rag_chain.invoke(question)
 
@@ -203,6 +180,11 @@ class MultiDatabaseChatAssistant:
         if intent is None:
             intent = self.intent_classifier.classify(question)
 
+        # 如果是导航意图，返回导航处理结果
+        if intent == 'campus_navigation':
+            navigation_result = self.navigation_handler.process_navigation_request(question)
+            return [f"导航结果: {navigation_result}"]
+
         retriever = self._get_retriever(intent)
         if retriever is None:
             return []
@@ -214,74 +196,26 @@ class MultiDatabaseChatAssistant:
         """获取所有数据库的状态"""
         status = {}
         for intent, config in self.intent_classifier.get_all_intents().items():
-            path = config['vectorstore_path']
-            status[intent] = {
-                'description': config['description'],
-                'path': path,
-                'exists': os.path.exists(path),
-                'loaded': intent in self.vectorstores
-            }
+            if intent == 'campus_navigation':
+                # 导航使用JSON文件而不是向量数据库
+                status[intent] = {
+                    'description': config['description'],
+                    'path': self.navigation_handler.locations_json_path,
+                    'exists': os.path.exists(self.navigation_handler.locations_json_path),
+                    'loaded': len(self.navigation_handler.locations_data) > 0,
+                    'type': 'json_locations'
+                }
+            else:
+                path = config['vectorstore_path']
+                status[intent] = {
+                    'description': config['description'],
+                    'path': path,
+                    'exists': os.path.exists(path),
+                    'loaded': intent in self.vectorstores,
+                    'type': 'vectorstore'
+                }
         return status
 
-
-def main():
-    # 初始化多数据库聊天助手
-    assistant = MultiDatabaseChatAssistant()
-
-    print("=== USTC 智能助手 ===")
-    print("我可以帮助您解决校园导航、校园信息和选课相关问题")
-    print("输入 'quit' 或 'exit' 退出程序")
-    print("输入 'status' 查看数据库状态")
-    print("输入 'debug: <问题>' 查看相关文档片段")
-
-    # 显示数据库状态
-    db_status = assistant.get_database_status()
-    print("\n=== 数据库状态 ===")
-    for intent, info in db_status.items():
-        status_text = "✓" if info['exists'] else "✗"
-        print(f"{status_text} {info['description']}: {info['path']}")
-
-    while True:
-        try:
-            user_input = input("\n请输入您的问题: ").strip()
-
-            if user_input.lower() in ['quit', 'exit', '退出']:
-                print("再见！")
-                break
-
-            if user_input.lower() == 'status':
-                db_status = assistant.get_database_status()
-                print("\n=== 数据库状态 ===")
-                for intent, info in db_status.items():
-                    status_text = "✓ 可用" if info['exists'] else "✗ 不可用"
-                    loaded_text = " (已加载)" if info['loaded'] else ""
-                    print(f"{info['description']}: {status_text}{loaded_text}")
-                    print(f"  路径: {info['path']}")
-                continue
-
-            if user_input.startswith('debug:'):
-                question = user_input[6:].strip()
-                intent = assistant.intent_classifier.classify(question)
-                docs = assistant.search_similar_docs(question, intent)
-                print(f"\n=== 问题类型: {assistant.intent_classifier.get_intent_description(intent)} ===")
-                print(f"=== 相关文档片段 ===")
-                for i, doc in enumerate(docs, 1):
-                    print(f"片段 {i}:")
-                    print(doc.page_content)
-                    print("-" * 50)
-                continue
-
-            # 正常问答
-            result = assistant.query(user_input)
-            print(f"\n【{result['intent_description']}】")
-            print(f"回答: {result['answer']}")
-
-        except KeyboardInterrupt:
-            print("\n程序被中断，再见！")
-            break
-        except Exception as e:
-            print(f"发生错误: {str(e)}")
-
-
-if __name__ == "__main__":
-    main()
+    def get_available_locations(self) -> List[str]:
+        """获取所有可用位置列表"""
+        return self.navigation_handler.location_names

@@ -127,5 +127,5 @@ def generate_vectorscore_xlsx():
 
 
 if __name__ == "__main__":
-    #generate_vectorstore_data_txt()
-    generate_vectorscore_xlsx()
+    generate_vectorstore_data_txt()
+    #generate_vectorscore_xlsx()
