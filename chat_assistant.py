@@ -36,11 +36,10 @@ class MultiDatabaseChatAssistant:
             return self.vectorstores[intent]
 
         if not os.path.exists(vectorstore_path):
-            print(f"警告: 向量数据库不存在: {vectorstore_path}")
+            print(f"vectorstore does not exist: {vectorstore_path}")
             return None
 
         try:
-            print(f"正在加载 {self.intent_classifier.get_intent_description(intent)} 数据库...")
             vectorstore = Chroma(
                 persist_directory=vectorstore_path,
                 embedding_function=self.embeddings
@@ -48,11 +47,11 @@ class MultiDatabaseChatAssistant:
             self.vectorstores[intent] = vectorstore
             return vectorstore
         except Exception as e:
-            print(f"加载向量数据库失败: {str(e)}")
+            print(f"failed to load vectorstore: {str(e)}")
             return None
 
     def _get_retriever(self, intent: str):
-        """获取指定意图的检索器"""
+        # 根据意图获取检索器
         if intent in self.retrievers:
             return self.retrievers[intent]
 
@@ -67,7 +66,7 @@ class MultiDatabaseChatAssistant:
         return retriever
 
     def _get_rag_chain(self, intent: str):
-        """获取指定意图的RAG链"""
+        # 根据意图获取RAG链
         if intent in self.rag_chains:
             return self.rag_chains[intent]
 
@@ -77,14 +76,14 @@ class MultiDatabaseChatAssistant:
 
         # 根据意图定制不同的提示模板
         templates = {
-            'campus_information': """以下问题基于提供的 context，分析问题并给出合理的建议回答：
+            'campus_information': """以下问题基于提供的上下文，分析问题并给出合理的建议回答：
 <context>
 {context}
 </context>
 Question: {input}
             """,
 
-            'course_selection': """以下问题基于提供的 context，分析问题并给出合理的建议回答：
+            'course_selection': """以下问题基于提供的上下文，分析问题并给出合理的建议回答：
 <context>
 {context}
 </context>
@@ -107,17 +106,15 @@ Question: {input}
         return rag_chain
 
     def query(self, question: str) -> Dict:
-        """查询问题并返回答案"""
+        # 生成答案
         try:
             # 1. 意图分类
-            print("正在分析问题类型...")
             intent = self.intent_classifier.classify(question)
             intent_desc = self.intent_classifier.get_intent_description(intent)
-            print(f"问题类型: {intent_desc}")
+            print(f"type: {intent_desc}")
 
             # 2. 如果是导航意图，使用地图导航处理器
             if intent == 'campus_navigation':
-                print("进入导航模式...")
                 navigation_result = self.navigation_handler.process_navigation_request(question)
 
                 if navigation_result["status"] == "success":
@@ -146,18 +143,11 @@ Question: {input}
                         "navigation_data": None
                     }
 
-            # 3. 其他意图使用原有的RAG处理
+            # 其他意图使用原有的RAG处理
             rag_chain = self._get_rag_chain(intent)
-            if rag_chain is None:
-                return {
-                    "intent": intent,
-                    "intent_description": intent_desc,
-                    "answer": f"抱歉，{intent_desc}数据库暂时不可用。",
-                    "status": "error"
-                }
 
-            # 4. 生成答案
-            print("正在生成答案...")
+            # 生成答案
+            print("Thinking...")
             answer = rag_chain.invoke(question)
 
             return {
@@ -170,20 +160,20 @@ Question: {input}
         except Exception as e:
             return {
                 "intent": "unknown",
-                "intent_description": "未知",
-                "answer": f"查询出错: {str(e)}",
+                "intent_description": "unknown",
+                "answer": f"query failed: {str(e)}",
                 "status": "error"
             }
 
     def search_similar_docs(self, question: str, intent: str = None, k: int = 3):
-        """搜索相似文档（用于调试）"""
+        # 搜索相似文档
         if intent is None:
             intent = self.intent_classifier.classify(question)
 
         # 如果是导航意图，返回导航处理结果
         if intent == 'campus_navigation':
             navigation_result = self.navigation_handler.process_navigation_request(question)
-            return [f"导航结果: {navigation_result}"]
+            return [f"navigation result: {navigation_result}"]
 
         retriever = self._get_retriever(intent)
         if retriever is None:
@@ -193,7 +183,7 @@ Question: {input}
         return docs[:k]
 
     def get_database_status(self) -> Dict:
-        """获取所有数据库的状态"""
+        # 获取数据库状态
         status = {}
         for intent, config in self.intent_classifier.get_all_intents().items():
             if intent == 'campus_navigation':
@@ -217,5 +207,5 @@ Question: {input}
         return status
 
     def get_available_locations(self) -> List[str]:
-        """获取所有可用位置列表"""
+        # 获取所有位置
         return self.navigation_handler.location_names

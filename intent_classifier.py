@@ -52,21 +52,21 @@ class IntentClassifier:
                     return intent
 
             # 如果无法匹配，返回默认意图
-            print(f"警告: 无法识别意图 '{result}', 使用默认意图 'campus_information'")
+            print(f"cannot verify, '{result}', use default 'campus_information'")
             return 'campus_information'
 
         except Exception as e:
-            print(f"意图分类出错: {str(e)}, 使用默认意图 'campus_information'")
+            print(f"classifier error: {str(e)}, use default 'campus_information'")
             return 'campus_information'
 
     def get_vectorstore_path(self, intent: str) -> str:
-        """根据意图获取对应的向量数据库路径"""
+        # 获取向量库路径
         return self.intent_config.get(intent, {}).get('vectorstore_path', os.environ['CAMPUS_PATH'])
 
     def get_intent_description(self, intent: str) -> str:
-        """获取意图描述"""
-        return self.intent_config.get(intent, {}).get('description', '未知意图')
+        # 获取意图描述
+        return self.intent_config.get(intent, {}).get('description', 'unknown')
 
     def get_all_intents(self) -> Dict:
-        """获取所有意图配置"""
+        # 获取所有意图配置
         return self.intent_config

@@ -63,7 +63,7 @@ def generate_vectorstore_data_txt():
         embedding=embeddings,
         persist_directory=persist_directory
     )
-    print(f"向量数据库已保存到: {persist_directory}")
+    print(f"vectorstore saved in: {persist_directory}")
     return vectorstore
 
 # 生成数据库并保存到./db/25spring_classes
@@ -96,7 +96,7 @@ def generate_vectorscore_xlsx():
             )
             documents.append(doc)
 
-        print(f"成功创建 {len(documents)} 个课程文档")
+        print(f" {len(documents)} documents created.")
 
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=1000,  # 增大chunk_size以保持课程信息完整性
@@ -117,7 +117,7 @@ def generate_vectorscore_xlsx():
             persist_directory=persist_directory
         )
 
-        print(f"向量数据库已保存到: {persist_directory}")
+        print(f"vectorstore saved in: {persist_directory}")
         return vectorstore
 
     except FileNotFoundError:
