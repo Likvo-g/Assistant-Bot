@@ -4,18 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="79046667-863c-4695-8e2b-3fc05edb2050" name="更改" comment="加入意图分析\多个数据库分组查询\优化选课数据库生成\">
+    <list default="true" id="79046667-863c-4695-8e2b-3fc05edb2050" name="更改" comment="sb">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/ustcGuide.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/ustcGuide.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/campus_information/85d43343-8c04-4060-bd91-becff2ecb068/data_level0.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/campus_information/85d43343-8c04-4060-bd91-becff2ecb068/header.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/campus_information/85d43343-8c04-4060-bd91-becff2ecb068/length.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/campus_information/85d43343-8c04-4060-bd91-becff2ecb068/link_lists.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/campus_information/chroma.sqlite3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/course/chroma.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db/course/chroma.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/generate_vectorscore.py" beforeDir="false" afterPath="$PROJECT_DIR$/generate_vectorscore.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_extracter.py" beforeDir="false" afterPath="$PROJECT_DIR$/json_extracter.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,11 +13,17 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="PUSH_AUTO_UPDATE" value="true" />
     <option name="PUSH_TAGS">
       <GitPushTagMode>
         <option name="argument" value="--tags" />
         <option name="title" value="All" />
       </GitPushTagMode>
+    </option>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="t2" />
+      </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -63,6 +59,7 @@
     "Python.intent_classifier.executor": "Run",
     "Python.json_extracter.executor": "Run",
     "Python.main.executor": "Run",
+    "Python.main_api.executor": "Run",
     "Python.navigation_handler.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "t1",
@@ -70,6 +67,11 @@
     "settings.editor.selected.configurable": "vcs.Git"
   }
 }]]></component>
+  <component name="Push.Settings">
+    <force-push-targets>
+      <force-push-target remote-path="origin" branch="t1" />
+    </force-push-targets>
+  </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="F:\Huobin\1py\sb\AssisLLM" />
@@ -119,7 +121,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750902957495</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="sb">
+      <option name="closed" value="true" />
+      <created>1751120390024</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1751120390024</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -136,6 +146,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="ver0.1" />
     <MESSAGE value="加入意图分析\多个数据库分组查询\优化选课数据库生成\" />
-    <option name="LAST_COMMIT_MESSAGE" value="加入意图分析\多个数据库分组查询\优化选课数据库生成\" />
+    <MESSAGE value="sb" />
+    <option name="LAST_COMMIT_MESSAGE" value="sb" />
   </component>
 </project>
