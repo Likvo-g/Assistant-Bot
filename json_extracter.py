@@ -32,6 +32,6 @@ def extract_name_and_coords(geojson_data):
             # 允许保存非ascii字符,缩进设置为2
             json.dump(search_items, file, ensure_ascii=False, indent=2)
 
-with open('./data/map.json', 'r', encoding='utf-8') as file:
+with open('../IntegratedHomework_25sping/data/map.json', 'r', encoding='utf-8') as file:
     geojson_data = json.load(file)
     extract_name_and_coords(geojson_data)

@@ -5,16 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="79046667-863c-4695-8e2b-3fc05edb2050" name="更改" comment="加入意图分析\多个数据库分组查询\优化选课数据库生成\">
-      <change afterPath="$PROJECT_DIR$/data/map.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/embeddings.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/json_extracter.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/navigation_handler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat_assistant.py" beforeDir="false" afterPath="$PROJECT_DIR$/chat_assistant.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/data/ustcGuide.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/ustcGuide.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/campus_information/85d43343-8c04-4060-bd91-becff2ecb068/data_level0.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/campus_information/85d43343-8c04-4060-bd91-becff2ecb068/header.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/campus_information/85d43343-8c04-4060-bd91-becff2ecb068/length.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/campus_information/85d43343-8c04-4060-bd91-becff2ecb068/link_lists.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/campus_information/chroma.sqlite3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/course/chroma.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db/course/chroma.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/generate_vectorscore.py" beforeDir="false" afterPath="$PROJECT_DIR$/generate_vectorscore.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intent_classifier.py" beforeDir="false" afterPath="$PROJECT_DIR$/intent_classifier.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/json_extracter.py" beforeDir="false" afterPath="$PROJECT_DIR$/json_extracter.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,11 +65,15 @@
     "Python.main.executor": "Run",
     "Python.navigation_handler.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "t1",
+    "last_opened_file_path": "F:/Huobin/1py/sb/AssisLLM",
     "settings.editor.selected.configurable": "vcs.Git"
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\Huobin\1py\sb\AssisLLM" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="F:\Huobin\1py\sb\AssisLLM\data" />
       <recent name="F:\Huobin\1py\sb\AssisLLM\none" />
@@ -106,7 +111,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750774668017</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="加入意图分析\多个数据库分组查询\优化选课数据库生成\">
+      <option name="closed" value="true" />
+      <created>1750902957495</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1750902957495</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

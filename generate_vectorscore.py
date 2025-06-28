@@ -52,7 +52,7 @@ class DoubaoEmbeddings():
 
 # 生成数据库并保存到db/campus_information
 def generate_vectorstore_data_txt():
-    loader = TextLoader("./data/ustcGuide.txt", encoding="utf-8")
+    loader = TextLoader("../IntegratedHomework_25sping/data/ustcGuide.txt", encoding="utf-8")
     documents = loader.load()
     text_splitter = CharacterTextSplitter(chunk_size=300, chunk_overlap=50)
     chunks = text_splitter.split_documents(documents)
